@@ -1,0 +1,38 @@
+About
+-----
+
+The install script in this directory will set up a number of virtualenvs 
+with the following variable dependencies:
+
+* python
+* numpy
+* scipy
+* matplotlib
+* pyfits
+* ipython
+* sip
+* PyQT4
+
+In addition, the following packages will be intalled using pip, so will be 
+set to the latest available version:
+
+* pytest
+* pylint
+* pyzmq
+* pygments
+* mock
+* atpy
+* aplpy
+* pep8
+* pytest-cov
+
+Instructions
+------------
+
+To run:
+
+    python install.py
+
+At this point, you might as well forget about it for a while and do 
+something else, as it will take many hours to install all the different 
+virtual environments!

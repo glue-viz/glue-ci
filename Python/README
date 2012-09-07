@@ -1,0 +1,16 @@
+About
+-----
+
+To set up virtual environments, we first need to make sure we have 
+installations of different Python versions that include virtualenv. The 
+install script in this directory will set up Python 2.6, 2.7, 3.1, and 3.2 
+including setuptools, distribute, pip, and virtualenv.
+
+Instructions
+------------
+
+To run:
+
+    python install.py
+
+Sit back, and enjoy a warm beverage!
