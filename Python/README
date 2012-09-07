@@ -13,7 +13,7 @@ To run:
 
     python install.py
 
-Sit back, and enjoy a warm beverage!
+Sit back, and enjoy a warm beverage! (takes approx. 12 minutes)
 
 After installation, it can be a good idea to ensure that these directories 
 are not writable, to ensure that we are sandboxing everything correctly:
