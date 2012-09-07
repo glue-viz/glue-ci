@@ -14,3 +14,9 @@ To run:
     python install.py
 
 Sit back, and enjoy a warm beverage!
+
+After installation, it can be a good idea to ensure that these directories 
+are not writable, to ensure that we are sandboxing everything correctly:
+
+    chmod -R a-w $HOME/usr/python
+
