@@ -49,6 +49,9 @@ for version in versions:
     shutil.copytree('{full}.tmp'.format(**version), '{full}'.format(**version))
     shutil.rmtree('{full}.tmp'.format(**version))
 
+    # Set permissions back to read/write
+    os.system("chmod -R u+w {full}".format(**version))
+
     # Install Numpy
     os.system('tar xvf tarfiles/numpy-{nv}.tar'.format(**version))
     os.chdir('numpy-{nv}'.format(**version))
