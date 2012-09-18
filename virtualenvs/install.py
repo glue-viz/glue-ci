@@ -2,45 +2,45 @@ import os
 import shutil
 from copy import deepcopy
 
+# Create dictionary of SIP versions for PyQt4 versions
+SIP = {}
+SIP['4.9.4'] = '4.13.3'
+
+# Set up virtual environments for testing ipython/pyqt4/matplotlib
+
 PYTHON_VERSIONS = ['2.6', '2.7']  # pv
-NUMPY_VERSIONS = ['1.4.1', '1.5.1', '1.6.2']  # nv
-SCIPY_VERSIONS = ['0.9.0', '0.10.1']  # sv
-MATPLOTLIB_VERSIONS = ['1.1.0', '1.1.1']  # mv
-IPYTHON_VERSIONS = ['0.11', '0.12', '0.13']  # iv
-PYFITS_VERSIONS = ['3.0.9', '3.1']  # fv
-SIP_VERSIONS = ['4.13.3']  # sipv
-PYQT4_VERSIONS = ['4.9.4']  # qtv
-
-ADDITIONAL_PIP = ['atpy', 'pygments', 'pyzmq', 'pylint', 'pytest', 'pep8', 'pytest-cov', 'aplpy', 'pywcs', 'mock']
-
+MATPLOTLIB_VERSIONS = ['1.1.0', '1.1.1']  # mv                                                                                                                           
+IPYTHON_VERSIONS = ['0.11', '0.12', '0.13']  # iv                                                                                                                         
+PYQT4_VERSIONS = ['4.9.4']  # qtv                                                                                                                                          
 
 def dist_name(**kwargs):
-    return 'python{pv}-numpy{nv}-scipy{sv}-ipython{iv}-pyfits{fv}-pyqt{qtv}-sip{sipv}'.format(**kwargs)
+    return 'python{pv}-ipython{iv}-pyqt{qtv}'.format(**kwargs)
 
 versions = []
 version = {}
+
+# Set environment variables for Scipy                                                                                                                                 
+version['env'] = 'BLAS=/n/glue/CI/virtualenvs/linalg/BLAS/libfblas.a LAPACK=/n/glue/CI/virtualenvs/linalg/LAPACK/liblapack.a'
+
+# Set up versions for fixed packages
+version['nv'] = '1.6.2'
+version['sv'] = '0.10.1'
+version['fv'] = '3.1'
+
+# Set up versions for variable packages
 for pv in PYTHON_VERSIONS:
     version['pv'] = pv
-    for nv in NUMPY_VERSIONS:
-        version['nv'] = nv
-        for sv in SCIPY_VERSIONS:
-            version['sv'] = sv
-            for mv in MATPLOTLIB_VERSIONS:
-                version['mv'] = mv
-                for iv in IPYTHON_VERSIONS:
-                    version['iv'] = iv
-                    for fv in PYFITS_VERSIONS:
-                        version['fv'] = fv
-                        for sipv in SIP_VERSIONS:
-                            version['sipv'] = sipv
-                            for qtv in PYQT4_VERSIONS:
-                                version['qtv'] = qtv
-                                versions.append(deepcopy(version))
+    for mv in MATPLOTLIB_VERSIONS:
+        version['mv'] = mv
+        for iv in IPYTHON_VERSIONS:
+            version['iv'] = iv
+            for qtv in PYQT4_VERSIONS:
+                version['qtv'] = qtv
+                version['sipv'] = SIP[qtv]
+                version['full'] = dist_name(**version)
+                versions.append(deepcopy(version))
 
 for version in versions:
-
-    # Get full path for Python virtualenv
-    version['full'] = dist_name(**version)
 
     # Set up virtualenv
     os.system('$HOME/usr/python/bin/virtualenv-{pv} --python=$HOME/usr/python/bin/python{pv} --no-site-packages {full}.tmp'.format(**version))
@@ -63,8 +63,8 @@ for version in versions:
     # Install Scipy
     os.system('tar xvf tarfiles/scipy-{sv}.tar'.format(**version))
     os.chdir('scipy-{sv}'.format(**version))
-    os.system('../{full}/bin/python{pv} setup.py build --fcompiler=gnu95'.format(**version))
-    os.system('../{full}/bin/python{pv} setup.py install'.format(**version))
+    os.system('{env} ../{full}/bin/python{pv} setup.py build --fcompiler=gnu95'.format(**version))
+    os.system('{env} ../{full}/bin/python{pv} setup.py install'.format(**version))
     os.chdir('../')
     os.system('rm -r scipy-{sv}'.format(**version))
 
@@ -107,4 +107,8 @@ for version in versions:
     os.chdir('../')
     os.system('rm -r sip-{sipv}'.format(**version))
     os.system('rm -r PyQt-x11-gpl-{qtv}'.format(**version))
+
+    # Install fixed version packages
+    os.system('{full}/bin/python {full}/bin/pip install -r dependencies.txt'.format(**version))
+
 

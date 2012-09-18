@@ -1,0 +1,10 @@
+pytest
+pylint
+pyzmq
+pygments
+mock
+atpy
+aplpy
+pywcs
+pep8
+pytest-cov
