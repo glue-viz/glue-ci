@@ -14,7 +14,7 @@ IPYTHON_VERSIONS = ['0.11', '0.12', '0.13']  # iv
 PYQT4_VERSIONS = ['4.9.4']  # qtv                                                                                                                                          
 
 def dist_name(**kwargs):
-    return 'python{pv}-ipython{iv}-pyqt{qtv}'.format(**kwargs)
+    return 'python{pv}-matplotlib{mv}-ipython{iv}-pyqt{qtv}'.format(**kwargs)
 
 versions = []
 version = {}
